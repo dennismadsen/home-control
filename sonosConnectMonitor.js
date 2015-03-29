@@ -4,6 +4,7 @@ var denon = require('./lib/denon');
 var avr = new denon({
 	host: '10.0.1.14'
 });
+
 avr.connect();
 
 var searchModel = "ZPS1"; //TODO: Change to Sonos Connect Model UUID
@@ -30,17 +31,21 @@ sonos.search(function(device, model) {
 function handleSonosConnectStarted() {
 	console.log("Sonos Connect started");
 	
-	avr.powerOn();
-	//TODO: Set source
-	//TODO: Set sound mode
-	//TODO: Set volume?
+	avr.powerOn(function () {
+		avr.setSourceToAUX(function() {
+			avr.setSoundModeToMultiChannelStereo(function() {
+				//TODO: Set volume?
+			});
+		});
+	});
 }
 
 function handleSonosConnectStopped() {
 	console.log("Sonos Connect stopped");
 	
-	avr.standby();
-	//TODO: Set sound mode to AUTO
+	avr.setSoundModeToAuto(function() {
+		avr.powerOff();
+	});
 }
 
 function getSonosState(callback) {
