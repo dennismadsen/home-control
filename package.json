@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "debug": "^2.1.3",
     "sonos": "^0.8.0",
     "telnet-client": "0.0.8"
   },
