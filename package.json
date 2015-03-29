@@ -1,0 +1,16 @@
+{
+  "name": "HomeControl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "sonos": "^0.8.0",
+    "denon-avr": "0.0.4",
+    "telnet-client": "0.0.8"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
