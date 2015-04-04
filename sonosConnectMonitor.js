@@ -5,11 +5,26 @@ var sonosObserver = new sonosObserver();
 var denonObserver = new denonObserver();
 
 var denonAvr = undefined;
+var denonBand = undefined;
 var sonosDevice = undefined;
+
+var denonBandSonosConnect = 'AUX1';
+var denonBandTV = 'TV';
 
 denonObserver.on('Discovered', function(device, attrs) {
 	console.log("Found Denon AVR "+attrs.name);
     denonAvr = device;
+});
+
+denonObserver.on('BandChanged', function(newBand) {
+    var oldBand = denonBand;
+    
+    if (oldBand===denonBandSonosConnect && newBand===denonBandTV) {
+        console.log('Denon AVR changed band from '+oldBand+' to '+newBand+'. Stopping Sonos.');
+        sonosDevice.stop();
+    }
+    
+    denonBand = newBand;
 });
 
 sonosObserver.on('DeviceAvailable', function(device, attrs) {
@@ -24,7 +39,7 @@ sonosObserver.on('Started', function(device, attrs) {
     denonAvr.push({
         on: true,
 		volume: 0.5,
-		band: 'AUX1',
+		band: denonBandSonosConnect,
 		soundmode: 'MCH STEREO'
     });
 });
@@ -32,17 +47,21 @@ sonosObserver.on('Started', function(device, attrs) {
 sonosObserver.on('Stopped', function(device, attrs) {
 	console.log('Sonos Connect stopped');
 
-    denonAvr.push({
-        on: false
-    });
+    if (denonBand===denonBandSonosConnect) {
+        denonAvr.push({
+            on: false
+        });
+    }
 });
 
 sonosObserver.on('Paused', function(device, attrs) {
 	console.log('Sonos Connect paused');
 
-    denonAvr.push({
-        on: false
-    });
+    if (denonBand===denonBandSonosConnect) {
+        denonAvr.push({
+            on: false
+        });
+    }
 });
 
 denonObserver.discover();

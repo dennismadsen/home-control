@@ -13,6 +13,6 @@ denonObserver.on('StateChanged', function(state) {
 
 denonObserver.on('BandChanged', function(band) {
     console.log(band);
-})
+});
 
 denonObserver.discover();
