@@ -1,23 +1,16 @@
 var sonosObserver = require('./lib/sonosObserver');
-var denonAVRBridge = require('homestar-denon-avr').Bridge;
+var denonObserver = require('./lib/denonObserver');
 
 var sonosObserver = new sonosObserver();
-var denonObserver = new denonAVRBridge();
+var denonObserver = new denonObserver();
 
 var denonAvr = undefined;
 var sonosDevice = undefined;
 
-denonObserver.discovered = function(bridge) {
-	var name = bridge.meta()['schema:name'];
-	
-    console.log("Found Denon AVR", name);
-    bridge.pulled = function(state) {
-        //console.log("+ state-change", state);
-    };
-    bridge.connect();
-	
-	denonAvr = bridge;
-};
+denonObserver.on('Discovered', function(device, attrs) {
+	console.log("Found Denon AVR "+attrs.name);
+    denonAvr = device;
+});
 
 sonosObserver.on('DeviceAvailable', function(device, attrs) {
 	var name = attrs['CurrentZoneName'];
