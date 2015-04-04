@@ -1,36 +1,45 @@
 var sonosObserver = require('./lib/sonosObserver');
-var denon = require('./lib/denon');
+var denonAVRBridge = require('homestar-denon-avr').Bridge.Bridge;
 
 var sonosObserver = new sonosObserver();
+var denonObserver = new denonAVRBridge();
 
-var avr = new denon({
-	host: '10.0.1.14'
-});
+var denonAvr = undefined;
+var sonosDevice = undefined;
 
-avr.connect();
-
-sonosObserver.observeByName("Kitchen");
+denonObserver.discovered = function(bridge) {
+    console.log("Found Denon AVR", bridge.meta());
+    bridge.pulled = function(state) {
+        //console.log("+ state-change", state);
+    };
+    bridge.connect();
+	
+	denonAvr = bridge;
+};
 
 sonosObserver.on('DeviceAvailable', function(device) {
 	console.log('Found Sonos Connect');
+	sonosDevice = device;
 });
 
 sonosObserver.on('Started', function(device) {
 	console.log('Sonos Connect started');
 	
-	avr.powerOn(function () {
-		avr.setSourceToAUX(function() {
-			avr.setSoundModeToMultiChannelStereo(function() {
-				//TODO: Set volume?
-			});
-		});
-	});
+    denonAvr.push({
+        on: true,
+		volume: 0.5,
+		band: 'AUX1',
+		soundmode: 'MCH STEREO'
+    });
 });
 
 sonosObserver.on('Stopped', function(device) {
 	console.log('Sonos Connect stopped');
 
-	avr.setSoundModeToAuto(function() {
-		avr.powerOff();
-	});
+    denonAvr.push({
+        on: false
+    });
 });
+
+denonObserver.discover();
+sonosObserver.observeByName("Stue");

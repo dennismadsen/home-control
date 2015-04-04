@@ -6,7 +6,7 @@
   "dependencies": {
     "debug": "^2.1.3",
     "sonos": "^0.8.0",
-    "telnet-client": "0.0.8"
+	"homestar-denon-avr": "git+ssh://git@github.com:DennisMadsen/homestar-denon-avr.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
