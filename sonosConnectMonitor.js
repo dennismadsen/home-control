@@ -21,7 +21,9 @@ denonObserver.on('BandChanged', function(newBand) {
     
     if (oldBand===denonBandSonosConnect && newBand===denonBandTV) {
         console.log('Denon AVR changed band from '+oldBand+' to '+newBand+'. Stopping Sonos.');
-        sonosDevice.stop();
+        sonosDevice.stop(function(err, stopped) {
+            
+        });
     }
     
     denonBand = newBand;
