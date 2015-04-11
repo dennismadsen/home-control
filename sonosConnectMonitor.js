@@ -3,7 +3,7 @@ var sonosObserver = require('./lib/sonosObserver');
 var denonObserver = require('./lib/denonObserver');
 
 
-log4js.configure('configuration/logging.json', {});
+log4js.configure('configurations/logging.json', {});
 var logger = log4js.getLogger("default");
 var sonosObserver = new sonosObserver();
 var denonObserver = new denonObserver();

@@ -1,0 +1,11 @@
+{
+    "appenders": [
+        { 
+            "category": "default", 
+            "type": "file", 
+            "filename": "logs/default.log",
+            "maxLogSize": 20480,
+            "backups": 10
+        }
+    ]
+}
