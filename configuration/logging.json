@@ -1,0 +1,9 @@
+{
+  "appenders": [
+    { 
+      "category": "default", 
+      "type": "file", 
+      "filename": "logging.log"
+    }
+  ]
+}

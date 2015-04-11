@@ -1,6 +1,10 @@
+var log4js = require('log4js');
 var sonosObserver = require('./lib/sonosObserver');
 var denonObserver = require('./lib/denonObserver');
 
+
+log4js.configure('configuration/logging.json', {});
+var logger = log4js.getLogger("default");
 var sonosObserver = new sonosObserver();
 var denonObserver = new denonObserver();
 
@@ -12,7 +16,7 @@ var denonBandSonosConnect = 'AUX1';
 var denonBandTV = 'TV';
 
 denonObserver.on('Discovered', function(device, attrs) {
-	console.log("Found Denon AVR "+attrs.name);
+	logger.info("Found Denon AVR "+attrs.name);
     denonAvr = device;
 });
 
@@ -20,7 +24,7 @@ denonObserver.on('BandChanged', function(newBand) {
     var oldBand = denonBand;
     
     if (oldBand===denonBandSonosConnect && newBand===denonBandTV) {
-        console.log('Denon AVR changed band from '+oldBand+' to '+newBand+'. Stopping Sonos.');
+        logger.info('Denon AVR changed band from '+oldBand+' to '+newBand+'. Stopping Sonos.');
         sonosDevice.stop(function(err, stopped) {
             
         });
@@ -31,12 +35,12 @@ denonObserver.on('BandChanged', function(newBand) {
 
 sonosObserver.on('DeviceAvailable', function(device, attrs) {
 	var name = attrs['CurrentZoneName'];
-	console.log('Found Sonos Connect named '+name);
+	logger.info('Found Sonos Connect named '+name);
 	sonosDevice = device;
 });
 
 sonosObserver.on('Started', function(device, attrs) {
-	console.log('Sonos Connect started');
+	logger.info('Sonos Connect started');
 	
     denonAvr.push({
         on: true,
@@ -47,7 +51,7 @@ sonosObserver.on('Started', function(device, attrs) {
 });
 
 sonosObserver.on('Stopped', function(device, attrs) {
-	console.log('Sonos Connect stopped');
+	logger.info('Sonos Connect stopped');
 
     if (denonBand===denonBandSonosConnect) {
         denonAvr.push({
@@ -57,7 +61,7 @@ sonosObserver.on('Stopped', function(device, attrs) {
 });
 
 sonosObserver.on('Paused', function(device, attrs) {
-	console.log('Sonos Connect paused');
+	logger.info('Sonos Connect paused');
 
     if (denonBand===denonBandSonosConnect) {
         denonAvr.push({
