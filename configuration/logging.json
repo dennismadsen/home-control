@@ -3,7 +3,7 @@
     { 
       "category": "default", 
       "type": "file", 
-      "filename": "logging.log"
+      "filename": "log/default.log"
     }
   ]
 }
