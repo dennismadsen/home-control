@@ -6,7 +6,6 @@
   "dependencies": {
     "debug": "~2.1.3",
     "homestar-denon-avr": "~0.0.10",
-    "iotdb": "~0.5.12",
     "sonos": "~0.8.0"
   },
   "scripts": {
