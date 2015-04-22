@@ -38,13 +38,7 @@ sonosObserver.on('DeviceAvailable', function (device, attrs) {
 sonosObserver.on('Started', function (device, attrs) {
     console.log('Sonos Connect started');
 
-    console.log('Turning Denon on');
-    denonAvr.push({
-        on: true,
-        volume: 0.7,
-        band: denonBandSonosConnect,
-        soundmode: 'MCH STEREO'
-    });
+    turnOnDenon();
 });
 
 sonosObserver.on('Stopped', function (device, attrs) {
@@ -61,12 +55,26 @@ sonosObserver.on('Paused', function (device, attrs) {
     turnOffDenon();
 });
 
-function turnOffDenon() {
-    console.log('Turning Denon off');
-    if (denonBand === denonBandSonosConnect) {
+function turnOnDenon() {
+    if (denonAvr) {
+        console.log('Turning Denon on');
         denonAvr.push({
-            on: false
+            on: true,
+            volume: 0.7,
+            band: denonBandSonosConnect,
+            soundmode: 'MCH STEREO'
         });
+    }
+}
+
+function turnOffDenon() {
+    if (denonAvr) {
+        console.log('Turning Denon off');
+        if (denonBand === denonBandSonosConnect) {
+            denonAvr.push({
+                on: false
+            });
+        }
     }
 }
 
