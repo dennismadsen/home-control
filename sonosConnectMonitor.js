@@ -11,55 +11,57 @@ var sonosDevice = undefined;
 var denonBandSonosConnect = 'AUX1';
 var denonBandTV = 'TV';
 
-denonObserver.on('Discovered', function(device, attrs) {
-	console.log("Found Denon AVR "+attrs.name);
+denonObserver.on('Discovered', function (device, attrs) {
+    console.log("Found Denon AVR " + attrs.name);
     denonAvr = device;
 });
 
-denonObserver.on('BandChanged', function(newBand) {
+denonObserver.on('BandChanged', function (newBand) {
     var oldBand = denonBand;
-    
-    if (oldBand===denonBandSonosConnect && newBand===denonBandTV) {
-        console.log('Denon AVR changed band from '+oldBand+' to '+newBand+'. Stopping Sonos.');
-        sonosDevice.stop(function(err, stopped) {
-            
+
+    if (oldBand === denonBandSonosConnect && newBand === denonBandTV) {
+        console.log('Denon AVR changed band from ' + oldBand + ' to ' + newBand + '. Stopping Sonos.');
+        sonosDevice.stop(function (err, stopped) {
+
         });
     }
-    
+
     denonBand = newBand;
 });
 
-sonosObserver.on('DeviceAvailable', function(device, attrs) {
-	var name = attrs['CurrentZoneName'];
-	console.log('Found Sonos Connect named '+name);
-	sonosDevice = device;
+sonosObserver.on('DeviceAvailable', function (device, attrs) {
+    var name = attrs['CurrentZoneName'];
+    console.log('Found Sonos Connect named ' + name);
+    sonosDevice = device;
 });
 
-sonosObserver.on('Started', function(device, attrs) {
-	console.log('Sonos Connect started');
-	
+sonosObserver.on('Started', function (device, attrs) {
+    console.log('Sonos Connect started');
+
     denonAvr.push({
         on: true,
-		volume: 0.5,
-		band: denonBandSonosConnect,
-		soundmode: 'MCH STEREO'
+        volume: 0.7,
+        band: denonBandSonosConnect,
+        soundmode: 'MCH STEREO'
     });
 });
 
-sonosObserver.on('Stopped', function(device, attrs) {
-	console.log('Sonos Connect stopped');
+sonosObserver.on('Stopped', function (device, attrs) {
+    console.log('Sonos Connect stopped');
 
-    if (denonBand===denonBandSonosConnect) {
+    //TODO: Switch Denon band to TV if it was in this state before Sonos started
+
+    if (denonBand === denonBandSonosConnect) {
         denonAvr.push({
             on: false
         });
     }
 });
 
-sonosObserver.on('Paused', function(device, attrs) {
-	console.log('Sonos Connect paused');
+sonosObserver.on('Paused', function (device, attrs) {
+    console.log('Sonos Connect paused');
 
-    if (denonBand===denonBandSonosConnect) {
+    if (denonBand === denonBandSonosConnect) {
         denonAvr.push({
             on: false
         });
