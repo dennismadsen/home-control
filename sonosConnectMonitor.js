@@ -69,8 +69,8 @@ function turnOnDenon() {
 
 function turnOffDenon() {
     if (denonAvr) {
-        console.log('Turning Denon off');
         if (denonBand === denonBandSonosConnect) {
+            console.log('Turning Denon off');
             denonAvr.push({
                 on: false
             });
