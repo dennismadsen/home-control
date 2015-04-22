@@ -4,15 +4,15 @@ var denonObserver = require('./lib/denonObserver');
 var sonosObserver = new sonosObserver();
 var denonObserver = new denonObserver();
 
-var denonAvr = undefined;
-var denonBand = undefined;
-var sonosDevice = undefined;
+var denonAvr;
+var denonBand;
+var sonosDevice;
 
 var denonBandSonosConnect = 'AUX1';
 var denonBandTV = 'TV';
 
 denonObserver.on('Discovered', function (device, attrs) {
-    console.log("Found Denon AVR " + attrs.name);
+    console.log('Found Denon AVR ' + attrs.name);
     denonAvr = device;
 });
 
@@ -69,4 +69,4 @@ sonosObserver.on('Paused', function (device, attrs) {
 });
 
 denonObserver.discover();
-sonosObserver.observeByName("Stue");
+sonosObserver.observeByName('Stue');
