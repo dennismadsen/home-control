@@ -38,6 +38,7 @@ sonosObserver.on('DeviceAvailable', function (device, attrs) {
 sonosObserver.on('Started', function (device, attrs) {
     console.log('Sonos Connect started');
 
+    console.log('Turning Denon on');
     denonAvr.push({
         on: true,
         volume: 0.7,
@@ -51,22 +52,23 @@ sonosObserver.on('Stopped', function (device, attrs) {
 
     //TODO: Switch Denon band to TV if it was in this state before Sonos started
 
-    if (denonBand === denonBandSonosConnect) {
-        denonAvr.push({
-            on: false
-        });
-    }
+    turnOffDenon();
 });
 
 sonosObserver.on('Paused', function (device, attrs) {
     console.log('Sonos Connect paused');
 
+    turnOffDenon();
+});
+
+function turnOffDenon() {
+    console.log('Turning Denon off');
     if (denonBand === denonBandSonosConnect) {
         denonAvr.push({
             on: false
         });
     }
-});
+}
 
 denonObserver.discover();
 sonosObserver.observeByName('Stue');
