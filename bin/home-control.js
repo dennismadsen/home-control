@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+'use strict';
 var argv = require('optimist')
     .usage('Usage: $0 --denonip [ip] --sonosname [name]')
     .demand(['denonip', 'sonosname'])
