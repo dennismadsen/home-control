@@ -1,32 +1,28 @@
 var sonosObserver = require('./lib/sonosObserver');
-var denonObserver = require('./lib/denonObserver');
+var denon = require('./lib/denon');
+var config = require('./config');
 
 var sonosObserver = new sonosObserver();
-var denonObserver = new denonObserver();
-
-var denonAvr;
-var denonBand;
-var sonosDevice;
-
-var denonBandSonosConnect = 'AUX1';
-var denonBandTV = 'TV';
-
-denonObserver.on('Discovered', function (device, attrs) {
-    console.log('Found Denon AVR ' + attrs.name);
-    denonAvr = device;
+var avr = new denon({
+    host: config.denonIp
 });
 
-denonObserver.on('BandChanged', function (newBand) {
-    var oldBand = denonBand;
+var denonSource;
+var sonosDevice;
 
-    if (oldBand === denonBandSonosConnect && newBand === denonBandTV) {
-        console.log('Denon AVR changed band from ' + oldBand + ' to ' + newBand + '. Stopping Sonos.');
-        sonosDevice.stop(function (err, stopped) {
+var denonSourceSonosConnect = 'AUX1';
+var denonSourceTV = 'TV';
 
-        });
+
+avr.on('SourceChanged', function (newSource) {
+    var oldSource = denonSource;
+
+    if (oldSource === denonSourceSonosConnect && newSource === denonSourceTV) {
+        console.log('Denon AVR changed source from ' + oldSource + ' to ' + newSource + '. Stopping Sonos.');
+        sonosDevice.stop(function (err, stopped) {});
     }
 
-    denonBand = newBand;
+    denonSource = newSource;
 });
 
 sonosObserver.on('DeviceAvailable', function (device, attrs) {
@@ -38,45 +34,38 @@ sonosObserver.on('DeviceAvailable', function (device, attrs) {
 sonosObserver.on('Started', function (device, attrs) {
     console.log('Sonos Connect started');
 
-    turnOnDenon();
+    turnDenonOnAndSetSourceToSonos();
 });
 
 sonosObserver.on('Stopped', function (device, attrs) {
     console.log('Sonos Connect stopped');
 
-    //TODO: Switch Denon band to TV if it was in this state before Sonos started
+    //TODO: Switch Denon source to TV if it was in this state before Sonos started
 
-    turnOffDenon();
+    turnDenonOffIfSourceIsSonos();
 });
 
 sonosObserver.on('Paused', function (device, attrs) {
     console.log('Sonos Connect paused');
 
-    turnOffDenon();
+    turnDenonOffIfSourceIsSonos();
 });
 
-function turnOnDenon() {
-    if (denonAvr) {
-        console.log('Turning Denon on');
-        denonAvr.push({
-            on: true,
-            volume: 0.7,
-            band: denonBandSonosConnect,
-            soundmode: 'MCH STEREO'
-        });
-    }
+function turnDenonOnAndSetSourceToSonos() {
+    console.log('Turning Denon on');
+    avr.powerOn();
+    avr.setSource(denonSourceSonosConnect);
+    avr.setSoundMode('MCH STEREO');
 }
 
-function turnOffDenon() {
-    if (denonAvr) {
-        if (denonBand === denonBandSonosConnect) {
-            console.log('Turning Denon off');
-            denonAvr.push({
-                on: false
-            });
+function turnDenonOffIfSourceIsSonos() {
+    avr.getSource(function (result) {
+        if (result === denonSourceSonosConnect) {
+            console.log('Powering Denon off');
+            avr.powerOff();
         }
-    }
+    });
 }
 
-denonObserver.discover();
-sonosObserver.observeByName('Stue');
+avr.connect();
+sonosObserver.observeByName(config.sonosName);

@@ -1,17 +1,16 @@
-var denonObserver = require('../lib/denonObserver');
+var denon = require('../lib/denon');
+var config = require('./config');
 
-var denonObserver = new denonObserver();
-
-denonObserver.on('Discovered', function (device, attrs) {
-    console.log('Found Denon AVR ' + attrs.name);
+var avr = new denon({
+    host: config.denonIp
 });
 
-denonObserver.on('StateChanged', function (state) {
+avr.on('StateChanged', function (state) {
     console.log(state);
 });
 
-denonObserver.on('BandChanged', function (band) {
-    console.log(band);
+avr.on('SourceChanged', function (source) {
+    console.log('Source changed:' + source);
 });
 
-denonObserver.discover();
+avr.connect();

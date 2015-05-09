@@ -1,8 +1,9 @@
 var sonosObserver = require('../lib/sonosObserver');
+var config = require('./config');
 
 var sonosObserver = new sonosObserver();
 
-sonosObserver.observeByName('Badeværelse');
+sonosObserver.observeByName(config.sonosName);
 
 sonosObserver.on('DeviceAvailable', function (device, attrs) {
     var name = attrs['CurrentZoneName'];
