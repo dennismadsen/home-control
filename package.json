@@ -1,8 +1,8 @@
 {
-    "name": "HomeControl",
-    "version": "1.0.0",
+    "name": "homecontrol",
+    "version": "0.1.0",
     "description": "",
-    "main": "index.js",
+    "main": "sonosConnectMonitor.js",
     "dependencies": {
         "debug": "*",
         "sonos": "*",

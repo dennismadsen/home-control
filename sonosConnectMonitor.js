@@ -7,7 +7,6 @@ var avr = new denon({
     host: config.denonIp
 });
 
-var denonSource;
 var sonosDevice;
 
 var denonSourceSonosConnect = 'AUX1';
@@ -15,14 +14,10 @@ var denonSourceTV = 'TV';
 
 
 avr.on('SourceChanged', function (newSource) {
-    var oldSource = denonSource;
-
-    if (oldSource === denonSourceSonosConnect && newSource === denonSourceTV) {
+    if (newSource === denonSourceTV) {
         console.log('Denon AVR changed source from ' + oldSource + ' to ' + newSource + '. Stopping Sonos.');
         sonosDevice.stop(function (err, stopped) {});
     }
-
-    denonSource = newSource;
 });
 
 sonosObserver.on('DeviceAvailable', function (device, attrs) {
@@ -52,6 +47,8 @@ sonosObserver.on('Paused', function (device, attrs) {
 });
 
 function turnDenonOnAndSetSourceToSonos() {
+    avr.connect();
+
     console.log('Turning Denon on');
     avr.powerOn();
     avr.setSource(denonSourceSonosConnect);
@@ -65,7 +62,8 @@ function turnDenonOffIfSourceIsSonos() {
             avr.powerOff();
         }
     });
+
+    avr.disconnect();
 }
 
-avr.connect();
 sonosObserver.observeByName(config.sonosName);
