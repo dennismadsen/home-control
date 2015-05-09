@@ -1,9 +1,9 @@
 {
     "name": "home-control",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "description": "",
     "bin": {
-        "gulp": "./bin/home-control.js"
+        "home-control": "./bin/home-control.js"
     },
     "dependencies": {
         "optimist": "*",
