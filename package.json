@@ -1,6 +1,6 @@
 {
     "name": "homecontrol",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "",
     "main": "sonosConnectMonitor.js",
     "dependencies": {
@@ -11,8 +11,12 @@
     "scripts": {
         "init": "npm install"
     },
-    "author": "",
-    "license": "ISC",
+    "author": "Dennis H. R. Madsen <dennis@hrmadsen.dk>",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dennismadsen/home-control"
+    },
     "devDependencies": {
         "gulp": "^3.8.11",
         "gulp-bump": "^0.3.0",
