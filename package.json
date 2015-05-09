@@ -2,8 +2,11 @@
     "name": "home-control",
     "version": "0.1.2",
     "description": "",
-    "main": "sonosConnectMonitor.js",
+    "bin": {
+        "gulp": "./bin/home-control.js"
+    },
     "dependencies": {
+        "optimist": "*",
         "debug": "*",
         "sonos": "*",
         "telnet-client": "*"

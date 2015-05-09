@@ -1,10 +1,14 @@
-var sonosObserver = require('./lib/sonosObserver');
-var denon = require('./lib/denon');
-var config = require('./config');
+var argv = require('optimist')
+    .usage('Usage: $0 --denonip [ip] --sonosname [name]')
+    .demand(['denonip', 'sonosname'])
+    .argv;
+
+var sonosObserver = require('../lib/sonosObserver');
+var denon = require('../lib/denon');
 
 var sonosObserver = new sonosObserver();
 var avr = new denon({
-    host: config.denonIp
+    host: argv.denonip
 });
 
 var sonosDevice;
@@ -66,4 +70,4 @@ function turnDenonOffIfSourceIsSonos() {
     avr.disconnect();
 }
 
-sonosObserver.observeByName(config.sonosName);
+sonosObserver.observeByName(argv.sonosname);
