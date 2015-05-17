@@ -19,10 +19,9 @@ var sonosDevice;
 var denonSourceSonosConnect = 'AUX1';
 var denonSourceTV = 'TV';
 
-
 avr.on('SourceChanged', function (newSource) {
     if (newSource === denonSourceTV) {
-        console.log('Denon AVR changed source from ' + oldSource + ' to ' + newSource + '. Stopping Sonos.');
+        console.log('Denon AVR changed source to ' + newSource + '. Stopping Sonos.');
         sonosDevice.stop(function (err, stopped) {});
     }
 });
