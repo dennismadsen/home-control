@@ -63,13 +63,13 @@ function turnDenonOnAndSetSourceToSonos() {
 
 function turnDenonOffIfSourceIsSonos() {
     avr.getSource(function (result) {
+        console.log(result);
         if (result === denonSourceSonosConnect) {
             console.log('Powering Denon off');
             avr.powerOff();
+            avr.disconnect();
         }
     });
-
-    avr.disconnect();
 }
 
 sonosObserver.observeByName(argv.sonosname);
