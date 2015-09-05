@@ -16,6 +16,6 @@ avr.on('SourceChanged', function (source) {
 avr.connect();
 
 setTimeout(function () {
-    console.log("disconnecting");
+    console.log('Disconnecting');
     avr.disconnect();
 }, 10000);
