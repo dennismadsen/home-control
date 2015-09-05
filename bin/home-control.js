@@ -19,7 +19,13 @@ var sonosDevice;
 var denonSourceSonosConnect = 'AUX1';
 var denonSourceTV = 'TV';
 
+var ignoreAvrSourceChanged = false;
+
 avr.on('SourceChanged', function (newSource) {
+    if (ignoreAvrSourceChanged) {
+        return;
+    }
+        
     if (newSource === denonSourceTV) {
         console.log('Denon AVR changed source to ' + newSource + '. Stopping Sonos.');
         sonosDevice.stop(function (err, stopped) {});
@@ -43,30 +49,45 @@ sonosObserver.on('Stopped', function (device, attrs) {
 
     //TODO: Switch Denon source to TV if it was in this state before Sonos started
 
-    turnDenonOffIfSourceIsSonos();
+    denonDisconnectAndOffIfSourceIsSonos();
 });
 
 sonosObserver.on('Paused', function (device, attrs) {
     console.log('Sonos Connect paused');
 
-    turnDenonOffIfSourceIsSonos();
+    denonDisconnectAndOffIfSourceIsSonos();
 });
 
 function turnDenonOnAndSetSourceToSonos() {
     avr.connect();
+    
+    ignoreAvrSourceChanged = true;
+
+    var endFunction = function(result) {
+        console.log('endFunctionCalled: '+result);
+        ignoreAvrSourceChanged = false;
+    };
 
     console.log('Turning Denon on');
-    avr.powerOn();
-    avr.setSource(denonSourceSonosConnect);
-    avr.setSoundMode('MCH STEREO');
+    avr.powerOn(function (result) {
+        console.log('powered on');
+        avr.setSource(denonSourceSonosConnect, function(result) {
+            console.log('source set');
+            ignoreAvrSourceChanged = false;
+        }, endFunction);
+    }, endFunction);
+    
+    // TODO: do we need to change sound mode?
+    //avr.setSoundMode('MCH STEREO');
 }
 
-function turnDenonOffIfSourceIsSonos() {
+function denonDisconnectAndOffIfSourceIsSonos() {
     avr.getSource(function (result) {
-        console.log(result);
         if (result === denonSourceSonosConnect) {
             console.log('Powering Denon off');
             avr.powerOff();
+            avr.disconnect();
+        } else {
             avr.disconnect();
         }
     });
