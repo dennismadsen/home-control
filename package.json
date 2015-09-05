@@ -1,6 +1,6 @@
 {
     "name": "home-control",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "description": "",
     "bin": {
         "home-control": "./bin/home-control.js"
