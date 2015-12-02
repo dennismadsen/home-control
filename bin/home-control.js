@@ -58,6 +58,7 @@ sonosObserver.on('Paused', function (device, attrs) {
 function handleSonosStopped() {
     if (denonSourceBeforeSonosWasTurnedOn !== undefined) {
         avr.setSource(denonSourceBeforeSonosWasTurnedOn);
+        avr.disconnect();
         denonSourceBeforeSonosWasTurnedOn = undefined;
     } else {
         disconnectDenonAndTurnOffIfSourceIsSonos();
