@@ -1,15 +1,15 @@
 {
     "name": "home-control",
-    "version": "0.1.11",
+    "version": "0.1.12",
     "description": "",
     "bin": {
         "home-control": "./bin/home-control.js"
     },
     "dependencies": {
-        "optimist": "*",
-        "debug": "*",
-        "sonos": "*",
-        "telnet-client": "*"
+        "optimist": "^0.6.1",
+        "debug": "^2.2.0",
+        "sonos": "^0.9.0",
+        "telnet-client": "^0.2.2"
     },
     "scripts": {
         "init": "npm install"

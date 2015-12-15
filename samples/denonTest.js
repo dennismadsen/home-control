@@ -6,6 +6,7 @@ var avr = new denon({
 });
 
 avr.on('StateChanged', function (state) {
+    console.log('State changed:');
     console.log(state);
 });
 
